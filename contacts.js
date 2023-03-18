@@ -6,16 +6,14 @@ const {v4} = require('uuid');
 
 const contactsPath = path.join(__dirname, './db/contacts.json');
 
-// TODO: задокументировать каждую функцию
-async function listContacts(action='list') {
+async function listContacts() {
     const response = await fs.readFile(contactsPath);
     const contacts = JSON.parse(response);
     return contacts;
   }
   
-async function getContactById(contactId, action='get') {
-    const response = await fs.readFile(contactsPath);
-    const contacts = JSON.parse(response);
+async function getContactById(contactId) {
+    const contacts = await listContacts();
     const contact = contacts.find(item => item.id === contactId);
     if (!contact) {
         return null;
@@ -23,7 +21,7 @@ async function getContactById(contactId, action='get') {
     return contact;
   }
   
-async function removeContact(contactId, action = 'remove') {
+async function removeContact(contactId) {
     const response = await fs.readFile(contactsPath);
     const contacts = JSON.parse(response);
     const idx = contacts.findIndex(item => item.id === contactId);
@@ -35,7 +33,7 @@ async function removeContact(contactId, action = 'remove') {
     return contacts[idx];
   }
   
-async function addContact(name, email, phone, action = 'add') {
+async function addContact(name, email, phone) {
     const response = await fs.readFile(contactsPath);
     const contacts = JSON.parse(response);
     const data = {name, email, phone};
